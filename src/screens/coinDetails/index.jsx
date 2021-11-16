@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AreaChart, XAxis, YAxis, Area } from 'recharts';
+import {
+    ResponsiveContainer,
+    AreaChart,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Area,
+} from 'recharts';
+import styles from './styles.module.scss';
 
 const index = () => {
     const params = useParams();
     const [coinData, setCoinData] = useState({});
     const [chartData, setChartData] = useState({});
+    const [amount, setAmount] = useState(0);
 
     const navigate = useNavigate();
     useEffect(async () => {
@@ -32,65 +41,106 @@ const index = () => {
     }, []);
 
     return (
-        <div>
-            <div>
+        <div className={styles.container}>
+            <div className={styles.coinNameContainer}>
                 {Object.keys(coinData).length && (
                     <img src={coinData.image.thumb} alt={params.coinId} />
                 )}
-                <h1>
-                    {coinData && coinData.name}{' '}
-                    <span>{coinData && coinData.symbol}</span>
-                </h1>
+                <h1>{coinData && coinData.name} </h1>
+                <p>{coinData && coinData.symbol}</p>
             </div>
-            <div>
+            <div className={styles.otherData}>
                 <p>{coinData && coinData.name} Price</p>
-                <h3>
+                <h1>
                     ₹
                     {Object.keys(coinData).length &&
-                        coinData.market_data.current_price.inr}{' '}
-                    <span>
+                        coinData.market_data.current_price.inr.toLocaleString(
+                            'en-IN'
+                        )}{' '}
+                    <span
+                        style={{
+                            backgroundColor:
+                                Object.keys(coinData).length &&
+                                coinData.market_data
+                                    .price_change_percentage_24h > 0
+                                    ? '#17D7A0'
+                                    : '#FF2626',
+                        }}
+                    >
                         {Object.keys(coinData).length &&
-                            coinData.market_data.price_change_percentage_24h}
+                            coinData.market_data.price_change_percentage_24h.toFixed(
+                                2
+                            )}
+                        %
                     </span>
-                </h3>
-                <div>
-                    <p>
+                </h1>
+                <div className={styles.lowHigh}>
+                    <p className={styles.low}>
                         Low: ₹
-                        {Object.keys(coinData).length &&
-                            coinData.market_data.low_24h.inr}
-                    </p>
-                    <p>
-                        High: ₹
-                        {Object.keys(coinData).length &&
-                            coinData.market_data.high_24h.inr}
-                    </p>
-                </div>
-                <div>
-                    <div>
-                        <p>{Object.keys(coinData).length && coinData.symbol}</p>
-                        <p>{Object.keys(coinData).length && coinData.name}</p>
-                        <input type='text' />
-                    </div>
-                    <div>
-                        <p>INR</p>
-                        <p>Indian Rupees</p>
-                        <p>
-                            ₹
+                        <span>
                             {Object.keys(coinData).length &&
-                                coinData.market_data.current_price.inr}
-                        </p>
-                    </div>
+                                coinData.market_data.low_24h.inr.toLocaleString(
+                                    'en-IN'
+                                )}
+                        </span>
+                    </p>
+                    <p className={styles.high}>
+                        High: ₹
+                        <span>
+                            {Object.keys(coinData).length &&
+                                coinData.market_data.high_24h.inr.toLocaleString(
+                                    'en-IN'
+                                )}
+                        </span>
+                    </p>
                 </div>
-                <div>
-                    {chartData.length && (
+            </div>
+            <div className={styles.converterContainer}>
+                <div className={styles.coinValue}>
+                    <div>
+                        <p className={styles.symbol}>
+                            {Object.keys(coinData).length && coinData.symbol}
+                        </p>
+                        <p>{Object.keys(coinData).length && coinData.name}</p>
+                    </div>
+                    <input
+                        type='number'
+                        value={amount}
+                        onChange={(e) =>
+                            e.target.value >= 0 && setAmount(e.target.value)
+                        }
+                    />
+                </div>
+                <div className={styles.convertedValue}>
+                    <div>
+                        <p className={styles.symbol}>INR</p>
+                        <p>Indian Rupees</p>
+                    </div>
+                    <p>
+                        ₹
+                        {Object.keys(coinData).length &&
+                            (
+                                coinData.market_data.current_price.inr * amount
+                            ).toLocaleString('en-IN')}
+                    </p>
+                </div>
+            </div>
+            <div className={styles.chartContainer}>
+                <h2>
+                    <span>
+                        {Object.keys(coinData).length && coinData.symbol}
+                    </span>{' '}
+                    To INR Chart
+                </h2>
+                {chartData.length && (
+                    <ResponsiveContainer height='100%' width='100%'>
                         <AreaChart
-                            width={800}
-                            height={300}
                             data={chartData.map((price) => {
                                 return {
                                     price: price[1],
                                 };
                             })}
+                            margin={{ left: 10 }}
                         >
                             <defs>
                                 <linearGradient
@@ -112,6 +162,10 @@ const index = () => {
                                     />
                                 </linearGradient>
                             </defs>
+                            <CartesianGrid
+                                strokeDasharray='3'
+                                style={{ opacity: 0.5 }}
+                            />
                             <YAxis dataKey='price' />
                             <XAxis tick={false} />
                             <Area
@@ -121,77 +175,87 @@ const index = () => {
                                 stroke='#e94c89'
                             />
                         </AreaChart>
-                    )}
+                    </ResponsiveContainer>
+                )}
+            </div>
+            <div className={styles.statsContainer}>
+                <h3>
+                    <span>
+                        {Object.keys(coinData).length && coinData.symbol}
+                    </span>{' '}
+                    Price Statistics
+                </h3>
+                <div>
+                    <p>{Object.keys(coinData).length && coinData.name} Price</p>
+                    <p className={styles.value}>
+                        ₹
+                        {Object.keys(coinData).length &&
+                            coinData.market_data.current_price.inr.toLocaleString(
+                                'en-IN'
+                            )}
+                    </p>
                 </div>
                 <div>
-                    <h3>
-                        {Object.keys(coinData).length && coinData.symbol} Price
-                        Statistics
-                    </h3>
-                    <div>
-                        <p>
-                            {Object.keys(coinData).length && coinData.name}{' '}
-                            Price
-                        </p>
-                        <p>
+                    <p>Price Change 24h</p>
+                    <p className={styles.value}>
+                        <span>
                             ₹
                             {Object.keys(coinData).length &&
-                                coinData.market_data.current_price.inr}
-                        </p>
-                    </div>
-                    <div>
-                        <p>Price Change 24h</p>
-                        <p>
-                            ₹
+                                coinData.market_data.price_change_24h_in_currency.inr.toLocaleString(
+                                    'en-IN'
+                                )}{' '}
+                        </span>
+                        <span>
                             {Object.keys(coinData).length &&
-                                coinData.market_data
-                                    .price_change_24h_in_currency.inr}{' '}
-                            {Object.keys(coinData).length &&
-                                coinData.market_data
-                                    .price_change_percentage_24h_in_currency
-                                    .inr}
+                                coinData.market_data.price_change_percentage_24h_in_currency.inr.toFixed(
+                                    2
+                                )}
                             %
-                        </p>
-                    </div>
-                    <div>
-                        <p>24h Low / 24h High</p>
-                        <p>
-                            ₹
-                            {Object.keys(coinData).length &&
-                                coinData.market_data.low_24h.inr}
-                            / ₹
-                            {Object.keys(coinData).length &&
-                                coinData.market_data.high_24h.inr}
-                        </p>
-                    </div>
-                    <div>
-                        <p>Trading Volume</p>
-                        <p>
-                            ₹
-                            {Object.keys(coinData).length &&
-                                coinData.market_data.total_volume.inr}
-                        </p>
-                    </div>
-                    <div>
-                        <p>Volume / Market Cap</p>
-                        <p>
-                            {Object.keys(coinData).length &&
-                                (
-                                    Number(
-                                        coinData.market_data.total_volume.inr
-                                    ) /
-                                    Number(coinData.market_data.market_cap.inr)
-                                ).toFixed(5)}
-                        </p>
-                    </div>
-                    <div>
-                        <p>Market Rank</p>
-                        <p>
-                            #
-                            {Object.keys(coinData).length &&
-                                coinData.market_cap_rank}
-                        </p>
-                    </div>
+                        </span>
+                    </p>
+                </div>
+                <div>
+                    <p>24h Low / 24h High</p>
+                    <p className={styles.value}>
+                        ₹
+                        {Object.keys(coinData).length &&
+                            coinData.market_data.low_24h.inr.toLocaleString(
+                                'en-IN'
+                            )}{' '}
+                        / ₹
+                        {Object.keys(coinData).length &&
+                            coinData.market_data.high_24h.inr.toLocaleString(
+                                'en-IN'
+                            )}
+                    </p>
+                </div>
+                <div>
+                    <p>Trading Volume</p>
+                    <p className={styles.value}>
+                        ₹
+                        {Object.keys(coinData).length &&
+                            coinData.market_data.total_volume.inr.toLocaleString(
+                                'en-IN'
+                            )}
+                    </p>
+                </div>
+                <div>
+                    <p>Volume / Market Cap</p>
+                    <p className={styles.value}>
+                        {Object.keys(coinData).length &&
+                            (
+                                Number(coinData.market_data.total_volume.inr) /
+                                Number(coinData.market_data.market_cap.inr)
+                            ).toFixed(5)}
+                    </p>
+                </div>
+                <div>
+                    <p>Market Rank</p>
+                    <p className={styles.value}>
+                        #
+                        {Object.keys(coinData).length &&
+                            coinData.market_cap_rank}
+                    </p>
                 </div>
             </div>
         </div>

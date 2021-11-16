@@ -7,12 +7,15 @@ import Lock from '../../assets/lock.svg';
 const Index = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
     const login = () => {
         if (email === 'test' && password === 'test') {
             localStorage.setItem('isAuth', 'authenticated');
             navigate('/list');
+        } else {
+            setError('Invalid Credentials!');
         }
     };
 
@@ -41,6 +44,7 @@ const Index = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                {error && <p className={styles.errorMessage}>{error}</p>}
                 <button onClick={login}>Login</button>
             </div>
         </div>

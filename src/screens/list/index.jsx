@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './styles.module.scss';
 import { AreaChart, XAxis, YAxis, Area } from 'recharts';
 import { useNavigate } from 'react-router-dom';
+import SearchIcon from '../../assets/search.svg';
 
 const Row = memo(({ coin }) => {
     const navigate = useNavigate();
@@ -19,10 +20,16 @@ const Row = memo(({ coin }) => {
             <td>
                 {coin.name} <span>({coin.symbol})</span>
             </td>
-            <td>₹{coin.current_price}</td>
-            <td>₹{coin.total_volume}</td>
-            <td>{coin.price_change_percentage_24h.toFixed(2)}%</td>
-            <td>₹{coin.market_cap}</td>
+            <td>₹{coin.current_price.toLocaleString('en-IN')}</td>
+            <td className={styles.desktopHidden}>
+                ₹{coin.total_volume.toLocaleString('en-IN')}
+            </td>
+            <td className={styles.mobileHidden}>
+                {coin.price_change_percentage_24h.toFixed(2)}%
+            </td>
+            <td className={styles.tabletHidden}>
+                ₹{coin.market_cap.toLocaleString('en-IN')}
+            </td>
             <td>
                 <AreaChart
                     width={200}
@@ -99,49 +106,67 @@ const index = () => {
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <div className={styles.header}>
                 <h1>Crypto Tracker</h1>
-                <input
-                    type='text'
-                    value={query}
-                    onKeyUp={(e) => {
-                        e.key === 'Enter' && search();
-                    }}
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-                {searchResults.length ? (
-                    <button onClick={clearSearch}>x</button>
-                ) : (
-                    <button onClick={search} disabled={!data.length}>
-                        Search
-                    </button>
-                )}
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Coin</th>
-                        <th>Price</th>
-                        <th>Volume</th>
-                        <th>24hr</th>
-                        <th>Market Cap</th>
-                        <th>Last 7 days</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <div>
+                    <input
+                        type='text'
+                        placeholder='Search...'
+                        value={query}
+                        onKeyUp={(e) => {
+                            e.key === 'Enter' && search();
+                        }}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
                     {searchResults.length ? (
-                        searchResults.map((coin) => (
-                            <Row key={coin.id} coin={coin} />
-                        ))
-                    ) : data.length ? (
-                        data.map((coin) => <Row key={coin.id} coin={coin} />)
+                        <button onClick={clearSearch}>x</button>
                     ) : (
-                        <tr></tr>
+                        <button onClick={search} disabled={!data.length}>
+                            <img src={SearchIcon} alt='search' />
+                        </button>
                     )}
-                </tbody>
-            </table>
+                </div>
+            </div>
+            <div className={styles.tableContainer}>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width='5%'></th>
+                            <th width='20%'>Coin</th>
+                            <th width='15%'>Price</th>
+                            <th width='20%' className={styles.desktopHidden}>
+                                Volume
+                            </th>
+                            <th
+                                className={`${styles.centerCol} ${styles.mobileHidden}`}
+                                width='5%'
+                            >
+                                24hr
+                            </th>
+                            <th width='10%' className={styles.tabletHidden}>
+                                Market Cap
+                            </th>
+                            <th className={styles.centerCol}>Last 7 days</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {searchResults.length ? (
+                            searchResults.map((coin) => (
+                                <Row key={coin.id} coin={coin} />
+                            ))
+                        ) : data.length ? (
+                            data.map((coin) => (
+                                <Row key={coin.id} coin={coin} />
+                            ))
+                        ) : (
+                            <tr>
+                                <td width='100%'>No Data</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

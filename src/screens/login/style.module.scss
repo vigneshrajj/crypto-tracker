@@ -34,6 +34,14 @@
                 height: 1.5rem;
             }
         }
+        .errorMessage {
+            font-weight: bold;
+            text-align: center;
+            padding: 0.3rem 0;
+            margin: 0.5rem;
+            border-radius: 5px;
+            background-color: #ff5151;
+        }
         button {
             background-color: $button_color;
             border: none;
