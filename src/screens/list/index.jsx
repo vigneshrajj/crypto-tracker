@@ -165,7 +165,7 @@ const index = () => {
                                     textAlign: 'center',
                                 }}
                             >
-                                <td colspan={7}>No Data</td>
+                                <td colSpan={7}>No Data</td>
                             </tr>
                         )}
                     </tbody>
