@@ -1,0 +1,8 @@
+@import './variables.scss';
+
+body {
+    font-family: Helvetica, Verdana, Geneva, Tahoma, sans-serif;
+    background-color: $primary_color;
+    color: white;
+    overflow: hidden;
+}

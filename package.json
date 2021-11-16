@@ -1,0 +1,21 @@
+{
+  "name": "crypto-tracker",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "recharts": "^2.1.6",
+    "sass": "^1.43.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.0",
+    "react-router-dom": "^6.0.2",
+    "vite": "^2.6.4"
+  }
+}
