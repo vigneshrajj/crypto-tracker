@@ -3,3 +3,6 @@ GET https://api.coingecko.com/api/v3/coins/markets?vs_currency=inr&order=market_
 ###
 GET https://api.coingecko.com/api/v3/coins/solana?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false HTTP/1.1
 # To get the details about a particular cryptocurrency
+###
+GET https://api.coingecko.com/api/v3/global
+# Get market dominance
