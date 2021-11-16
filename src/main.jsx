@@ -13,6 +13,12 @@ ReactDOM.render(
                 <Route path='/' element={<Login />} />
                 <Route path='/list' element={<List />} />
                 <Route path='/coin/:coinId' element={<CoinDetails />} />
+                <Route
+                    path='*'
+                    element={
+                        <h1 style={{ textAlign: 'center' }}>Page Not Found</h1>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,

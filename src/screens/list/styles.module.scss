@@ -29,11 +29,15 @@
             padding: 0.5rem;
             outline: none;
             border: none;
-            background-color: $secondary_color;
+            background-color: $button_color;
             color: white;
             line-height: 100%;
             width: 2rem;
             height: 30px;
+            cursor: pointer;
+            &:hover {
+                background-color: $button_hover_color;
+            }
         }
     }
     .tableContainer {

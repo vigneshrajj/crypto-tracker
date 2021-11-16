@@ -40,7 +40,7 @@ const index = () => {
         );
     }, []);
 
-    return (
+    return Object.keys(coinData).length ? (
         <div className={styles.container}>
             <div className={styles.coinNameContainer}>
                 {Object.keys(coinData).length && (
@@ -259,6 +259,8 @@ const index = () => {
                 </div>
             </div>
         </div>
+    ) : (
+        <h1 className={styles.noData}>Oops, No data found!</h1>
     );
 };
 

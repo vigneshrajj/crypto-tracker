@@ -160,8 +160,12 @@ const index = () => {
                                 <Row key={coin.id} coin={coin} />
                             ))
                         ) : (
-                            <tr>
-                                <td width='100%'>No Data</td>
+                            <tr
+                                style={{
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <td colspan={7}>No Data</td>
                             </tr>
                         )}
                     </tbody>
