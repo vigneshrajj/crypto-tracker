@@ -12,6 +12,7 @@
         background-color: $secondary_color;
         display: flex;
         flex-direction: column;
+        animation: 0.5s fadeIn;
         .inputContainer {
             display: flex;
             padding: 0.5rem;

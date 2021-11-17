@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    animation: 0.8s fadeIn;
     .header {
         display: flex;
         justify-content: space-between;

@@ -89,20 +89,17 @@ const index = () => {
     return Object.keys(coinData).length ? (
         <div className={styles.container}>
             <div className={styles.coinNameContainer}>
-                {Object.keys(coinData).length && (
-                    <img src={coinData.image.thumb} alt={params.coinId} />
-                )}
-                <h1>{coinData && coinData.name} </h1>
-                <p>{coinData && coinData.symbol}</p>
+                <img src={coinData.image.thumb} alt={params.coinId} />
+                <h1>{coinData.name} </h1>
+                <p>{coinData.symbol}</p>
             </div>
             <div className={styles.otherData}>
-                <p>{coinData && coinData.name} Price</p>
+                <p>{coinData.name} Price</p>
                 <h1>
                     ₹
-                    {Object.keys(coinData).length &&
-                        coinData.market_data.current_price.inr.toLocaleString(
-                            'en-IN'
-                        )}{' '}
+                    {coinData.market_data.current_price.inr.toLocaleString(
+                        'en-IN'
+                    )}{' '}
                     <span
                         style={{
                             backgroundColor:
@@ -113,10 +110,9 @@ const index = () => {
                                     : '#FF2626',
                         }}
                     >
-                        {Object.keys(coinData).length &&
-                            coinData.market_data.price_change_percentage_24h.toFixed(
-                                2
-                            )}
+                        {coinData.market_data.price_change_percentage_24h.toFixed(
+                            2
+                        )}
                         %
                     </span>
                 </h1>
@@ -151,10 +147,8 @@ const index = () => {
             <div className={styles.converterContainer}>
                 <div className={styles.coinValue}>
                     <div>
-                        <p className={styles.symbol}>
-                            {Object.keys(coinData).length && coinData.symbol}
-                        </p>
-                        <p>{Object.keys(coinData).length && coinData.name}</p>
+                        <p className={styles.symbol}>{coinData.symbol}</p>
+                        <p>{coinData.name}</p>
                     </div>
                     <input
                         type='number'
@@ -190,27 +184,20 @@ const index = () => {
                     </div>
                     <p>
                         {(
-                            Object.keys(coinData).length &&
-                            amountCurrency &&
-                            amountCurrency.price * amount
+                            amountCurrency && amountCurrency.price * amount
                         ).toFixed(2) || 0}
                     </p>
                 </div>
             </div>
             <div className={styles.chartContainer}>
                 <h2>
-                    <span>
-                        {Object.keys(coinData).length && coinData.symbol}
-                    </span>{' '}
-                    To INR Chart
+                    <span>{coinData.symbol}</span> To INR Chart
                 </h2>
                 {chartData.length && <Chart chartData={chartData} />}
             </div>
-            {Object.keys(coinData).length && (
-                <div className={styles.statsContainer}>
-                    <Stats coinData={coinData} dominance={dominance} />
-                </div>
-            )}
+            <div className={styles.statsContainer}>
+                <Stats coinData={coinData} dominance={dominance} />
+            </div>
         </div>
     ) : (
         <h1 className={styles.noData}>Oops, No data found!</h1>
